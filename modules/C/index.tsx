@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { useLayoutEffect, useState } from 'react'
 
-import Model from './model'
+import Model from '../model'
 
 const Index = () => {
 	const [x] = useState(() => new Model())
