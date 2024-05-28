@@ -1,106 +1,111 @@
-import { resolve } from 'path'
+import { resolve } from "path";
 
-import { defineConfig } from '@rspack/cli'
-import { CopyRspackPlugin, HtmlRspackPlugin } from '@rspack/core'
-import ReactRefreshPlugin from '@rspack/plugin-react-refresh'
+import { defineConfig } from "@rspack/cli";
+import { CopyRspackPlugin, HtmlRspackPlugin } from "@rspack/core";
+import ReactRefreshPlugin from "@rspack/plugin-react-refresh";
 
-const is_dev = process.env.NODE_ENV === 'development'
-const is_prod = process.env.NODE_ENV === 'production'
-const is_module = false
+const is_dev = process.env.NODE_ENV === "development";
+const is_prod = process.env.NODE_ENV === "production";
+const is_module = false;
 
 const plugins_dev = [
 	new ReactRefreshPlugin({
-		exclude: [/node_modules/]
-	})
-]
+		exclude: [/node_modules/],
+	}),
+];
 const plugins_prod = [
 	new CopyRspackPlugin({
-		patterns: [{ from: './public', to: './', globOptions: { ignore: ['**/index.html'] } }]
-	})
-]
+		patterns: [
+			{
+				from: "./public",
+				to: "./",
+				globOptions: { ignore: ["**/index.html"] },
+			},
+		],
+	}),
+];
 
 module.exports = defineConfig({
-	devtool: is_dev ? 'source-map' : false,
+	devtool: is_dev ? "source-map" : false,
 	entry: {
-		main: './index.tsx'
+		main: "./index.tsx",
 	},
 	output: {
 		clean: is_prod,
-		publicPath: ''
+		publicPath: "",
 	},
 	watchOptions: {
-		ignored: /node_modules/
+		ignored: /node_modules/,
 	},
 	resolve: {
-		extensions: ['.tsx', '.ts', '.js'],
-		tsConfigPath: resolve(__dirname, 'tsconfig.json')
+		extensions: [".tsx", ".ts", ".js"],
+		tsConfigPath: resolve(__dirname, "tsconfig.json"),
 	},
 	devServer: {
-		compress: false
-	},
-	node: {
-		global: false
+		compress: false,
 	},
 	experiments: {
 		outputModule: is_module,
-		rspackFuture: {
-			// newTreeshaking: true,
-		}
+		lazyCompilation: false,
 	},
 	plugins: [
 		new HtmlRspackPlugin({
-			title: 'rspack_reproduce',
-			template: './public/index.html',
-			scriptLoading: is_module ? 'module' : 'defer'
+			title: "rspack_reproduce",
+			template: "./public/index.html",
+			scriptLoading: is_module ? "module" : "defer",
 		}),
-		...(is_dev ? plugins_dev : plugins_prod)
+		...(is_dev ? plugins_dev : plugins_prod),
 	],
 	module: {
+		parser: {
+			css: { namedExports: false },
+			"css/module": { namedExports: false },
+		},
 		rules: [
 			{
 				test: /\.ts$/,
 				use: {
-					loader: 'builtin:swc-loader',
+					loader: "builtin:swc-loader",
 					options: {
 						jsc: {
 							parser: {
-								syntax: 'typescript',
+								syntax: "typescript",
 								dynamicImport: true,
 								exportDefaultFrom: true,
 								exportNamespaceFrom: true,
-								decorators: true
+								decorators: true,
 							},
 							transform: {
 								legacyDecorator: true,
-								decoratorMetadata: true
+								decoratorMetadata: true,
 							},
 							minify: {
 								compress: {
-									drop_console: is_prod
-								}
+									drop_console: is_prod,
+								},
 							},
-							externalHelpers: true
+							externalHelpers: true,
 						},
 						env: {
-							targets: 'chrome >= 120'
-						}
-					}
-				}
+							targets: "chrome >= 120",
+						},
+					},
+				},
 			},
 			{
 				test: /\.tsx$/,
 				exclude: [/[\\/]node_modules[\\/]/],
 				use: {
-					loader: 'builtin:swc-loader',
+					loader: "builtin:swc-loader",
 					options: {
 						jsc: {
 							parser: {
-								syntax: 'typescript',
+								syntax: "typescript",
 								tsx: true,
 								dynamicImport: true,
 								exportDefaultFrom: true,
 								exportNamespaceFrom: true,
-								decorators: true
+								decorators: true,
 							},
 							transform: {
 								legacyDecorator: true,
@@ -108,27 +113,27 @@ module.exports = defineConfig({
 								react: {
 									development: !is_prod,
 									refresh: !is_prod,
-									runtime: 'automatic',
-									useBuiltins: true
-								}
+									runtime: "automatic",
+									useBuiltins: true,
+								},
 							},
 							minify: {
 								compress: {
-									drop_console: is_prod
-								}
+									drop_console: is_prod,
+								},
 							},
-							externalHelpers: true
+							externalHelpers: true,
 						},
 						env: {
-							targets: 'chrome >= 120'
-						}
-					}
-				}
+							targets: "chrome >= 120",
+						},
+					},
+				},
 			},
 			{
 				test: /\.(png|svg|jpg)$/,
-				type: 'asset/source'
-			}
-		]
-	}
-})
+				type: "asset/source",
+			},
+		],
+	},
+});

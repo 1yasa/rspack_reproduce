@@ -1,35 +1,28 @@
-import { observer } from 'mobx-react-lite'
-import { useLayoutEffect, useState } from 'react'
+import { observer } from "mobx-react-lite";
+import { useLayoutEffect, useState } from "react";
 
-import Model from '../model'
+import styles from "@/modules/index.css";
+import { Star } from "@phosphor-icons/react";
+
+import Model from "../model";
+
+console.log("styles: ", styles);
 
 const Index = () => {
-	const [x] = useState(() => new Model())
-
-	console.log(777)
+	const [x] = useState(() => new Model());
 
 	useLayoutEffect(() => {
-		x.init()
+		x.init();
 
-		return () => x.off()
-	}, [])
+		return () => x.off();
+	}, []);
 
 	return (
-		<div
-			style={{
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				width: '100%',
-				height: 'calc(100vh - 36px - 24px)',
-				backgroundColor: 'blue',
-				color: 'white'
-			}}
-			onClick={() => x.add()}
-		>
+		<div className={styles?.b} onClick={() => x.add()}>
+			<Star size={18}></Star>
 			BBB ({x.count})
 		</div>
-	)
-}
+	);
+};
 
-export default observer(Index)
+export default observer(Index);
