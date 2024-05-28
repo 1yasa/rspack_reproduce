@@ -30,6 +30,10 @@
 		"@types/react-dom": "^18.3.0",
 		"react-refresh": "^0.14.2",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.4.5"
+		"typescript": "^5.4.5",
+		"postcss-calc": "^9.0.1",
+		"postcss-import": "^16.1.0",
+		"postcss-loader": "^7.3.4",
+		"postcss-nested": "^6.0.1"
 	}
 }

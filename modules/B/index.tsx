@@ -19,7 +19,7 @@ const Index = () => {
 
 	return (
 		<div className={styles?.b} onClick={() => x.add()}>
-			<Star size={18}></Star>
+			<Star className="star" size={18}></Star>
 			BBB ({x.count})
 		</div>
 	);

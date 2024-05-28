@@ -6,4 +6,10 @@
 	height: calc(100vh - 36px - 24px);
 	color: white;
 	background-color: blue;
+
+	:global {
+		.star {
+			color: red;
+		}
+	}
 }
